@@ -1,38 +1,65 @@
-function Main() {
-    return(
-        <main className="content">
-        <section className="profile">
-          <img className="profile__avatar" src="<%=require('./images/avatar.jpg')%>" alt="Аватар пользователя" />
-          <button className="profile__avatar-button" onClick={handleEditAvatarClick}></button>
-          <div className="profile__info">
-            <div className="profile__data">
-              <h1 className="profile__name">Жак-Ив Кусто</h1>
-              <p className="profile__about-me">Исследователь океана</p>
-            </div>
-            <button className="profile__edit-button" type="button" onClick={handleEditProfileClick}>Редактировать</button>
+import React from 'react';
+import api from '../utils/Api';
+import Card from './Card';
+
+function Main(props) {
+  const [userName, setUserName] = React.useState(`Жак Иф Кусто`);
+  const [userDescription, setUserDescription] = React.useState(`Исследователь океанов`);
+  const [userAvatar, setUserAvatar] = React.useState([]);
+  const [cards, setCards] = React.useState([]);
+
+  React.useEffect(() => {
+    api.getUserInfo()
+      .then((userData) => {
+        setUserName(userData.name);
+        setUserDescription(userData.about);
+        setUserAvatar(userData.avatar);
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      });
+  }, [])
+
+  React.useEffect(() => {
+    api.getInitialCards()
+      .then((initialCards) => {
+        setCards(initialCards);
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      });
+  }, [])
+
+  return (
+    <main className="content">
+      <section className="profile">
+        <div className="profile__avatar" style={{ backgroundImage: `url(${userAvatar})` }}></div>
+        <button className="profile__avatar-button" onClick={props.onEditAvatar}></button>
+        <div className="profile__info">
+          <div className="profile__data">
+            <h1 className="profile__name">{userName}</h1>
+            <p className="profile__about-me">{userDescription}</p>
           </div>
-          <button className="profile__add-button" type="button" onClick={handleAddPlaceClick}>Добавить фото</button>
-        </section>
-        <section className="elements">
-          <ul className="elements__list">
-
-          </ul>
-        </section>
-      </main>
-    )
-}
-
-
-function handleEditAvatarClick() {
-    document.querySelector('.popup_type_avatar').classList.add('popup_opened');
-}
-
-function handleEditProfileClick() {
-    document.querySelector('.popup_type_profile').classList.add('popup_opened');
-}
-
-function handleAddPlaceClick() {
-    document.querySelector('.popup_type_img').classList.add('popup_opened');
+          <button className="profile__edit-button" type="button" onClick={props.onEditProfile}>Редактировать</button>
+        </div>
+        <button className="profile__add-button" type="button" onClick={props.onAddPlace}>Добавить фото</button>
+      </section>
+      <section className="elements">
+        <ul className="elements__list">
+          {cards.map((card) => 
+            <Card
+              key={card._id}
+              link={card.link}
+              name={card.name}
+              likes={card.likes}
+              card={card}
+              onCardClick={props.onCardClick}
+            />
+          )}
+        </ul>
+      </section>
+    </main>
+  )
 }
 
 export default Main;
