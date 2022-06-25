@@ -1,4 +1,4 @@
-# Место на «React» <img src="https://media.giphy.com/media/hUL5gdlvDgtRbOElZS/giphy.gif" width="48px" height="28px" alt="React-gif"> 
+# Место на «React» <img src="https://media.giphy.com/media/hUL5gdlvDgtRbOElZS/giphy.gif" width="96px" height="56px" alt="React-gif"> 
 ### *Учебный проект от Яндекс.Практикум*
 
 ## Описание проекта
