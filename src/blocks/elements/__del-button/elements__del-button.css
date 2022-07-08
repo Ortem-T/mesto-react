@@ -11,6 +11,7 @@
   top: 20px;
   right: 20px;
   transition: opacity 0.3s ease-in-out;
+  display: none;
 }
 
 .elements__del-button:hover {
